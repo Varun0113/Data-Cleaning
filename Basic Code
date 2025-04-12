@@ -1,0 +1,131 @@
+import pandas as pd
+data = [['Alex', 10], ['Bob', 12], ['Clarke', 13]]
+df = pd.DataFrame(data, columns=['Name', 'Age'])
+print(df)
+
+df = pd.read_csv("employees_info.csv")
+print(df)
+
+#get general info
+df.info()
+
+#get specify column listed
+df['name']
+
+#first row
+#loc[<rows_to_select>,<columns_to_select>]
+df.loc[0]
+
+#Get the records with row index 0 to 5 and with columns 'name' and 'job title'.
+df.loc[0:5,["name","job title"]]
+
+#get records based on conditions
+df.loc[(df["department"] == "Accounting"), ["name", "job title", "department"]]
+
+# Handling missing values in a dataset by imputation or deletion.
+#Delete a column
+del df['time zone']
+
+# Drop duplicates
+df.drop_duplicates()
+
+# Drop duplicate in specify column
+df1=df.drop_duplicates(subset=['residence'])
+print(df1)
+
+# Delete first and keep last
+df.drop_duplicates(subset=['residence', 'department'], keep='last')
+print(df1)
+
+# Count missing values in each column
+print("\nMissing Values Count:\n", df.isnull().sum())
+
+# Percentage of missing values
+print("\nMissing Values Percentage:\n", df.isnull().mean() * 100)
+
+
+#Drop Rows with Missing Values
+df_dropped_rows = df.dropna()
+print("\nAfter Dropping Rows:\n", df_dropped_rows)
+
+#deletion
+#Drop Columns with Missing Values
+df_dropped_cols = df.dropna(axis=1)
+print("\nAfter Dropping Columns:\n", df_dropped_cols)
+
+#Drop Rows/Columns with Specific Threshold
+df_threshold = df.dropna(thresh=2)  # Keep rows with at least 2 non-NaN values
+print("\nAfter Threshold Drop:\n", df_threshold)
+
+#imputation
+#Fill Missing Values with Default Values
+df_filled_default = df.fillna("U")
+print("\nAfter Filling with Default Value:\n", df_filled_default)
+
+#Correcting inconsistencies in data entry
+#Standardize Formats
+#Convert text to lowercase or title case.
+df['name'] = df['name'].str.title()
+
+# Convert every character in lower case
+df['name'] = df['name'].str.lower()
+
+# Replace/substitute
+df['gender'] = df['gender'].replace({'M': 'Male', 'F': 'Female'})
+
+#remove non-numeric characters
+df['phone'] = df['phone'].str.replace(r'-', '', regex=True)  
+
+
+# Filter based on criteria
+data = {
+    'age': [25, 27, 15, 45, 100, -5],
+    'salary': [50000, 60000, 120000, 150000, 30000, None],
+    'experience': [2, 5, 0, 10, 0, 20],
+    'location': ['NY', 'LA', 'SF', 'NY', 'LA', 'SF']
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Show the original data
+print("Original Data:")
+print(df)
+
+# Filter out rows where 'age' is less than 18 or greater than 100
+filtered_df = df[
+    (df['age'] >= 18) & (df['age'] <= 100)           
+   
+]
+# Show filtered data
+print("\nFiltered Data:")
+print(filtered_df)
+
+
+# Filter out rows where 'experience' is less than 1 or greater than 30
+filtered_df = df[
+    (df['experience'] >= 1) & (df['experience'] < 20) # Experience criteria
+]
+
+# Show filtered data
+print("\nFiltered Data:")
+print(filtered_df)
+
+
+#Cleaning textual data by removing HTML tags, punctuation, and special characters.
+#re.sub(pattern, replacement, text):
+import re
+text = "Hello #GLS @Ahmedabad Studnets <p>  <br>  at www.glsuniversity.ac.in"
+print(text)
+def remove_html_tags(text):
+    clean_text = re.sub(r'<.*?>', '', text)
+    return clean_text
+def remove_special_characters(text):
+    clean_text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    return clean_text
+
+remove_html = remove_html_tags(text)
+print(remove_html)
+
+remove_sChar = remove_special_characters(remove_html)
+print(remove_sChar)
